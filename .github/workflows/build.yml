@@ -48,6 +48,13 @@ jobs:
         run: |
           echo "storageAccountKey=$(az storage account show-connection-string --name ${{ steps.bicep-deploy.outputs.storageAccountName }} --resource-group rg-storage-web-australiaeast -o tsv)" >> $GITHUB_OUTPUT
 
+      - name: Enable Static Website Hosting
+        run: |
+          az storage blob service-properties update \
+            --account-name ${{ steps.bicep-deploy.outputs.storageAccountName }} \
+            --static-website \
+            --index-document index.html
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
 
@@ -55,7 +62,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: pnpm install
         run: pnpm install
@@ -71,5 +78,15 @@ jobs:
           source_dir: ./dist
           sync: true
 
-      - name: Website URL
-        run: echo "${{ steps.bicep-deploy.outputs.staticWebsiteUrl }}"
+      - name: Website URL as GitHub Output summary
+        run: |
+          WEBSITE_URL=$(az storage account show --name ${{ steps.bicep-deploy.outputs.storageAccountName }} --resource-group rg-storage-web-australiaeast --query "primaryEndpoints.web" --output tsv)
+          echo "## 🚀 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Your static website has been deployed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**🌐 Website URL:** $WEBSITE_URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**📦 Storage Account:** ${{ steps.bicep-deploy.outputs.storageAccountName }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**📅 Deployed:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY

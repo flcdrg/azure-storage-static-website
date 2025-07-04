@@ -70,3 +70,6 @@ jobs:
           container_name: "$web"
           source_dir: ./dist
           sync: true
+
+      - name: Website URL
+        run: echo "${{ steps.bicep-deploy.outputs.staticWebsiteUrl }}"

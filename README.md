@@ -1,4 +1,10 @@
-# Development notes
+# Hosting a static website in Azure Storage
+
+An example of deploying a simple vanilla Vite static website to an Azure Storage account, deployed with GitHub Actions.
+
+[Azure Blob Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website?WT.mc_id=DOP-MVP-5001655) supports a simple static website hosting.
+
+## Development notes
 
 ## Infrastructure
 

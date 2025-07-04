@@ -46,7 +46,7 @@ jobs:
       - name: Get Storage Account connection string
         id: connection-string
         run: |
-          echo "##[set-output name=storageAccountKey;]$(az storage account show-connection-string --name ${{ steps.bicep-deploy.outputs.storageAccountName }} --resource-group rg-storage-web-australiaeast -o tsv)"
+          echo "storageAccountKey=$(az storage account show-connection-string --name ${{ steps.bicep-deploy.outputs.storageAccountName }} --resource-group rg-storage-web-australiaeast -o tsv)" >> $GITHUB_OUTPUT
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
@@ -68,5 +68,4 @@ jobs:
           connection_string: ${{ steps.connection-string.outputs.storageAccountKey }}
           container_name: "$web"
           source_dir: ./dist
-          overwrite: true
           sync: true

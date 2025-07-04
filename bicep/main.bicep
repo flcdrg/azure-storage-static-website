@@ -81,6 +81,3 @@ output storageAccountName string = storageAccount.name
 output storageAccountId string = storageAccount.id
 output primaryEndpoints object = storageAccount.properties.primaryEndpoints
 output staticWebsiteUrl string = enableStaticWebsite ? storageAccount.properties.primaryEndpoints.web : ''
-
-// Output storage account connection string
-output storageAccountKey string = storageAccount.listKeys().keys[0].value

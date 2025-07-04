@@ -42,7 +42,11 @@ jobs:
           parameters-file: ./bicep/parameters.json
           action-on-unmanage-resources: delete # Delete unmanaged resources
           deny-settings-mode: none # Allow write and delete operations
-          masked-outputs: storageAccountKey # Mask the storage account key in the output
+
+      - name: Get Storage Account connection string
+        id: connection-string
+        run: |
+          echo "##[set-output name=storageAccountKey;]$(az storage account show-connection-string --name ${{ steps.bicep-deploy.outputs.storageAccountName }} --resource-group rg-storage-web-australiaeast -o tsv)"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
@@ -61,8 +65,8 @@ jobs:
       - name: Azure Blob Storage Upload
         uses: bacongobbler/azure-blob-storage-upload@v3.0.0
         with:
-          connection_string: ${{ steps.bicep-deploy.outputs.storageAccountKey }}
-          container_name: static-website
+          connection_string: ${{ steps.connection-string.outputs.storageAccountKey }}
+          container_name: "$web"
           source_dir: ./dist
-
-
+          overwrite: true
+          sync: true

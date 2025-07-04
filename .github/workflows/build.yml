@@ -1,0 +1,38 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["main"]
+  #pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-bicep:
+    name: Build Bicep
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Login With OpenID Connect
+      - name: "Login via Azure CLI"
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - uses: azure/bicep-deploy@v2
+        with:
+          type: deploymentStack
+          operation: create
+          name: Development
+          location: australiaeast
+          scope: resourceGroup
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID}}
+          resource-group-name: rg-storage-web-australiaeast
+          template-file: ./bicep/main.bicep
+          parameters-file: ./bicep/parameters.json
+          action-on-unmanage-resources: delete

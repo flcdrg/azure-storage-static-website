@@ -19,10 +19,10 @@ Create credential.json
 
 ```json
 {
-    "name": "Testing",
-    "issuer": "https://token.actions.githubusercontent.com/",
-    "subject": "repo:octo-org/octo-repo:environment:Production",
-    "description": "Testing",
+    "name": "main",
+    "issuer": "https://token.actions.githubusercontent.com",
+    "subject": "repo:octo-org/octo-repo:ref:refs/heads/main",
+    "description": "Main branch",
     "audiences": [
         "api://AzureADTokenExchange"
     ]

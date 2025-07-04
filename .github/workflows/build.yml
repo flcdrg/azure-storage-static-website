@@ -39,4 +39,5 @@ jobs:
           resource-group-name: rg-storage-web-australiaeast
           template-file: ./bicep/main.bicep
           parameters-file: ./bicep/parameters.json
-          action-on-unmanage-resources: delete
+          action-on-unmanage-resources: delete # Delete unmanaged resources
+          deny-settings-mode: none # Allow write and delete operations

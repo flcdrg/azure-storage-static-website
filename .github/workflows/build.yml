@@ -56,7 +56,7 @@ jobs:
             --index-document index.html
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.5
 
       - name: Use Node.js 22.x
         uses: actions/setup-node@v6
